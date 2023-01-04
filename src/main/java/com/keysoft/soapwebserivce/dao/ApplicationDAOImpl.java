@@ -1,6 +1,7 @@
 package com.keysoft.soapwebserivce.dao;
 
 import com.keysoft.soapwebserivce.Application;
+import com.keysoft.soapwebserivce.generated.PropertiesReader;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -11,27 +12,19 @@ import java.util.List;
 import java.util.Properties;
 
 public class ApplicationDAOImpl implements ApplicationDAO {
-    
+
     private String host;
     private String user;
     private String pass;
 
     public ApplicationDAOImpl() {
-        try {
-            String path = getClass().getClassLoader().getResource("db-config.properties").getPath();
-            InputStream configFile = new FileInputStream(path);
-            final Properties properties = new Properties();
-            properties.load(configFile);
-            initConfig(properties);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        initConfig(new PropertiesReader("db-config"));
     }
 
-    private void initConfig(Properties properties) {
+    private void initConfig(PropertiesReader properties) {
         host = properties.getProperty("host");
-        user = properties.getProperty("user");
-        pass = properties.getProperty("pass");
+        user = properties.getProperty("username");
+        pass = properties.getProperty("password");
     }
     
     @Override
