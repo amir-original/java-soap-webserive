@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class ApplicationClientShould {
 
@@ -40,6 +41,31 @@ public class ApplicationClientShould {
 
         assertEquals(getTrackzilla(),proxy.getApplication(1));
     }
+
+    @Test
+    void return_true_when_add_application_for_first_times() {
+        ApplicationServiceSoap serviceSoap = new ApplicationServiceSoap();
+
+        ApplicationSOAPService proxy = serviceSoap.getApplicationServicePort();
+
+        Application app = new Application(400,"FaceId","keep users face to authorizing");
+
+        assertTrue(proxy.addApplication(app));
+    }
+
+    @Test
+    void update_application() throws MalformedURLException {
+        URL wsdURL = new URL("http://localhost:8080/soap-webserivce-1.0-SNAPSHOT/ApplicationServiceSOAP?wsdl");
+        QName qName = new QName("http://soapwebserivce.keysoft.com/", "ApplicationServiceSOAP");
+        Service service = Service.create(wsdURL, qName);
+        ApplicationSOAPService port = service.getPort(ApplicationSOAPService.class);
+
+        Application app = new Application(400,"update: FaceId","update: keep users face to authorizing");
+        boolean result = port.updateApplication(app);
+        assertTrue(result);
+    }
+
+
 
     private static Application getTrackzilla() {
         return new Application(1, "Trackzilla", "A bug tracking application");

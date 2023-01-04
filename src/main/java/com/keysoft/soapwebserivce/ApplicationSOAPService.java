@@ -12,4 +12,10 @@ public interface ApplicationSOAPService {
 
     @WebMethod
     Application getApplication(int id);
+
+    @WebMethod
+    boolean addApplication(Application app);
+
+    @WebMethod
+    boolean updateApplication(Application app);
 }
