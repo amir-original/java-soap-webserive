@@ -2,22 +2,43 @@ package com.keysoft.soapwebserivce.dao;
 
 import com.keysoft.soapwebserivce.Application;
 
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.sql.*;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Properties;
 
 public class ApplicationDAOImpl implements ApplicationDAO {
+    
+    private String host;
+    private String user;
+    private String pass;
 
+    public ApplicationDAOImpl() {
+        try {
+            String path = getClass().getClassLoader().getResource("db-config.properties").getPath();
+            InputStream configFile = new FileInputStream(path);
+            final Properties properties = new Properties();
+            properties.load(configFile);
+            initConfig(properties);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
-    private static final String HOST = "jdbc:mysql://localhost:3306/trackzilla_schema";
-    private static final String USER = "amir";
-    private static final String PASSWORD = "@wsrmp1378";
-
+    private void initConfig(Properties properties) {
+        host = properties.getProperty("host");
+        user = properties.getProperty("user");
+        pass = properties.getProperty("pass");
+    }
+    
     @Override
     public List<Application> findAll() {
         List<Application> applications = new LinkedList<>();
 
-        try (Connection connection = DriverManager.getConnection(HOST, USER, PASSWORD);) {
+        try (Connection connection = DriverManager.getConnection(host, user, pass);) {
             String sql = "select * from tza_application";
             PreparedStatement select = connection.prepareStatement(sql);
             ResultSet res = select.executeQuery();
@@ -34,8 +55,8 @@ public class ApplicationDAOImpl implements ApplicationDAO {
 
     @Override
     public Application findById(int id) {
-        Application application = null;
-        try (Connection connection = DriverManager.getConnection(HOST, USER, PASSWORD);) {
+        Application application;
+        try (Connection connection = DriverManager.getConnection(host, user, pass);) {
             String sql = "select * from tza_application where id =?";
             PreparedStatement select = connection.prepareStatement(sql);
             select.setInt(1, id);
@@ -51,7 +72,7 @@ public class ApplicationDAOImpl implements ApplicationDAO {
     @Override
     public Application findByIdAndName(int id, String name) {
         Application application;
-        try (Connection connection = DriverManager.getConnection(HOST, USER, PASSWORD);) {
+        try (Connection connection = DriverManager.getConnection(host, user, pass);) {
             String sql = "select * from tza_application where id =? and name=?";
             PreparedStatement select = connection.prepareStatement(sql);
             select.setInt(1, id);
@@ -68,7 +89,7 @@ public class ApplicationDAOImpl implements ApplicationDAO {
     @Override
     public void addApplication(Application application) {
 
-        try (Connection connection = DriverManager.getConnection(HOST, USER, PASSWORD);) {
+        try (Connection connection = DriverManager.getConnection(host, user, pass);) {
             String sql = "insert into tza_application values (?,?,?)";
             PreparedStatement insert = connection.prepareStatement(sql);
             insert.setInt(1, application.getId());
@@ -84,7 +105,7 @@ public class ApplicationDAOImpl implements ApplicationDAO {
 
     @Override
     public void delete(int id) {
-        try (Connection connection = DriverManager.getConnection(HOST, USER, PASSWORD);) {
+        try (Connection connection = DriverManager.getConnection(host, user, pass);) {
             String sql = "delete from tza_application where id=?";
             PreparedStatement delete = connection.prepareStatement(sql);
             delete.setInt(1, id);
@@ -96,7 +117,7 @@ public class ApplicationDAOImpl implements ApplicationDAO {
 
     @Override
     public void updateApplication(Application application) {
-        try (Connection connection = DriverManager.getConnection(HOST, USER, PASSWORD);) {
+        try (Connection connection = DriverManager.getConnection(host, user, pass);) {
             String sql = "update tza_application set name=?,description=? where id=?";
             PreparedStatement update = connection.prepareStatement(sql);
             update.setString(1, application.getName());
