@@ -3,6 +3,7 @@ import com.keysoft.soapwebserivce.ApplicationSOAPService;
 import com.keysoft.soapwebserivce.generated.ApplicationServiceSoap;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import sun.tools.jar.CommandLine;
 
 import java.util.List;
 import java.util.Optional;
@@ -59,6 +60,11 @@ public class ApplicationClientShould {
     @Test
     void delete_application() {
         assertTrue(servicePort.delete(FACEID_APP_ID));
+    }
+
+    @Test
+    void get_application_as_xml() {
+        servicePort.getApplication(1).toXml();
     }
 
     private static Application getTrackzilla() {

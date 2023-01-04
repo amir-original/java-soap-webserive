@@ -7,10 +7,12 @@ import com.keysoft.soapwebserivce.service.ApplicationService;
 import com.keysoft.soapwebserivce.service.ApplicationServiceImpl;
 
 import javax.jws.WebService;
+import javax.jws.soap.SOAPBinding;
 import java.util.List;
 
 @WebService(endpointInterface = "com.keysoft.soapwebserivce.ApplicationSOAPService",
         serviceName = "ApplicationServiceSOAP")
+@SOAPBinding(style = SOAPBinding.Style.RPC)
 public class ApplicationSOAPServiceImpl implements ApplicationSOAPService {
 
     private final ApplicationService service;

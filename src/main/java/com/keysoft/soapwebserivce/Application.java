@@ -1,7 +1,13 @@
 package com.keysoft.soapwebserivce;
 
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
 import java.util.Objects;
 
+@XmlRootElement
 public class Application {
     private  int id;
     private  String name;
@@ -16,6 +22,7 @@ public class Application {
         this.description = description;
     }
 
+    @XmlElement
     public int getId() {
         return id;
     }
@@ -23,7 +30,7 @@ public class Application {
     public void setId(int id) {
         this.id = id;
     }
-
+    @XmlElement
     public String getName() {
         return name;
     }
@@ -31,7 +38,7 @@ public class Application {
     public void setName(String name) {
         this.name = name;
     }
-
+    @XmlElement
     public String getDescription() {
         return description;
     }
@@ -40,6 +47,17 @@ public class Application {
         this.description = description;
     }
 
+
+    public void toXml(){
+        try{
+            JAXBContext jaxbContext = JAXBContext.newInstance(Application.class);
+            Marshaller marshaller = jaxbContext.createMarshaller();
+            marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT,Boolean.TRUE);
+            marshaller.marshal(this,System.out);
+        } catch (JAXBException e) {
+            e.printStackTrace();
+        }
+    }
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
