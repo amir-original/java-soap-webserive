@@ -18,4 +18,7 @@ public interface ApplicationSOAPService {
 
     @WebMethod
     boolean updateApplication(Application app);
+
+    @WebMethod
+    boolean delete(int id);
 }

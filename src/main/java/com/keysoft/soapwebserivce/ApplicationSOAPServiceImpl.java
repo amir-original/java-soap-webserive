@@ -50,4 +50,15 @@ public class ApplicationSOAPServiceImpl implements ApplicationSOAPService {
         }
         return result;
     }
+
+    @Override
+    public boolean delete(int id) {
+        boolean result = true;
+        try {
+            service.delete(id);
+        } catch (RuntimeSQLException e) {
+            result = false;
+        }
+        return result;
+    }
 }
